@@ -1,4 +1,10 @@
 require('dotenv').config();
+console.log('MySQL Config:', {
+    host: process.env.MYSQLHOST || process.env.MYSQL_HOST,
+    port: process.env.MYSQLPORT || process.env.MYSQL_PORT,
+    user: process.env.MYSQLUSER || process.env.MYSQL_USER,
+    database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE
+});
 const fastify = require('fastify')({ logger: true });
 const mysqlDB = require('./config/db.js');
 const port = process.env.PORT || 3401;

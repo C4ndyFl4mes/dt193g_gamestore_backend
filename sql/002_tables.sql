@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS games (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    age_ratingID INT NOT NULL,
+    title VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL,
+    image_url VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS age_ratings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rating VARCHAR(10) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    genre_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS game_genres (
+    gameID INT NOT NULL,
+    genreID INT NOT NULL,
+    PRIMARY KEY (gameID, genreID)
+);

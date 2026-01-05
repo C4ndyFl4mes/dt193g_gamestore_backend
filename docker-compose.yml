@@ -27,7 +27,7 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}

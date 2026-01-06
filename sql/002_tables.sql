@@ -6,13 +6,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS games (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userID INT NOT NULL,
     age_ratingID INT NOT NULL,
     title VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
-    stock INT NOT NULL,
-    image_url VARCHAR(255)
+    stock INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS age_ratings (
@@ -22,7 +20,6 @@ CREATE TABLE IF NOT EXISTS age_ratings (
 
 CREATE TABLE IF NOT EXISTS genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userID INT NOT NULL,
     genre_name VARCHAR(50) NOT NULL UNIQUE
 );
 
@@ -30,4 +27,10 @@ CREATE TABLE IF NOT EXISTS game_genres (
     gameID INT NOT NULL,
     genreID INT NOT NULL,
     PRIMARY KEY (gameID, genreID)
+);
+
+CREATE TABLE IF NOT EXISTS images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gameID INT NOT NULL UNIQUE,
+    image_key VARCHAR(500) NOT NULL
 );

@@ -1,4 +1,4 @@
-INSERT TABLE age_ratings (rating) VALUES
+INSERT INTO age_ratings (rating) VALUES
 ('E'),
 ('E10+'),
 ('T'),

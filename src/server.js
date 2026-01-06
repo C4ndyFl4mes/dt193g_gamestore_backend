@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const fastify = require('fastify')({ logger: true });
+// const multipart = ;
 const mysqlDB = require('./config/db.js');
 const port = process.env.PORT || 3401;
 
@@ -11,14 +12,16 @@ async function init() {
     try {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
-        fastify.register(require("./routes/user.route"));
-
-        fastify.get('/test', async function (req, reply) {
-            const connection = await fastify.mysql.getConnection();
-            const [tables] = await connection.query('SHOW TABLES;');
-            connection.release();
-            reply.send({ tables: tables });
+        // Begränsar filstorlekar.
+        fastify.register(require('@fastify/multipart'), {
+            limits: {
+                fileSize: 5 * 1024 * 1024
+            }
         });
+        fastify.register(require("./routes/user.route"));
+        fastify.register(require("./routes/product.route"));
+        fastify.register(require("./routes/image.route"));
+       
 
         // Startar servern.
         await fastify.listen({ port: port, host: "0.0.0.0" });

@@ -4,9 +4,9 @@ ALTER TABLE games
 
 ALTER TABLE game_genres
     ADD CONSTRAINT fk_game
-    FOREIGN KEY (gameID) REFERENCES games(id),
+    FOREIGN KEY (gameID) REFERENCES games(id) ON DELETE CASCADE,
     ADD CONSTRAINT fk_genre
-    FOREIGN KEY (genreID) REFERENCES genres(id);
+    FOREIGN KEY (genreID) REFERENCES genres(id) ON DELETE CASCADE;
 
 ALTER TABLE images
     ADD CONSTRAINT fk_game_image

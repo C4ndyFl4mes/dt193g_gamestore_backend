@@ -1,19 +1,7 @@
-const Product = {
-    type: 'object',
-    required: ['age_ratingID', 'title', 'description', 'price', 'stock'],
-    properties: {
-        age_ratingID: { type: 'number' },
-        title: { type: 'string', minLength: 2, maxLength: 100 },
-        description: { type: 'string' },
-        price: { type: 'number', multipleOf: 0.01 },
-        stock: { type: 'number' }
-    }
-}
-
 const UpdateProduct = {
     type: 'object',
     properties: {
-        age_ratingID: { type: 'number' },
+        age_ratingID: { type: 'integer', minimum: 1 },
         title: { type: 'string', minLength: 2, maxLength: 100 },
         description: { type: 'string' },
         price: { type: 'number', multipleOf: 0.01 },
@@ -22,43 +10,35 @@ const UpdateProduct = {
 }
 
 const IdQuery = {
-  type: 'object',
-  required: ['id'],
-  properties: {
-    id: { type: 'integer', minimum: 1 }
-  }
-};
-
-const Success = {
     type: 'object',
+    required: ['id'],
     properties: {
-        acknowledged: { type: 'boolean' },
-        insertedId: { type: 'string' }
-    }
-}
-
-const ProductAsList = {
-    type: 'array',
-    items: {
-        type: 'object',
-        required: ['id', 'title', 'description', 'price', 'stock', 'rating'],
-        properties: {
-            id: { type: 'number' },
-            title: { type: 'string', minLength: 2, maxLength: 100 },
-            description: { type: 'string' },
-            price: { type: 'number', multipleOf: 0.01 },
-            stock: { type: 'number' },
-            rating: { type: 'string' },
-            image_key: { type: ['string', 'null'] }
-        }
+        id: { type: 'integer', minimum: 1 }
     }
 };
 
 const post_product_schema = {
     schema: {
-        body: Product,
+        body: {
+            type: 'object',
+            required: ['age_ratingID', 'title', 'description', 'price', 'stock'],
+            properties: {
+                age_ratingID: { type: 'number' },
+                title: { type: 'string', minLength: 2, maxLength: 100 },
+                description: { type: 'string' },
+                price: { type: 'number', multipleOf: 0.01 },
+                stock: { type: 'number' }
+            }
+        },
         response: {
-            201: Success
+            201: {
+                type: 'object',
+                required: ['success', 'id'],
+                properties: {
+                    success: { type: 'boolean' },
+                    id: { type: 'integer', minimum: 1 }
+                }
+            }
         }
     }
 };
@@ -66,7 +46,29 @@ const post_product_schema = {
 const get_products_schema = {
     schema: {
         response: {
-            200: ProductAsList
+            200: {
+                type: 'object',
+                required: ['success', 'games'],
+                properties: {
+                    success: { type: 'boolean' },
+                    games: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            required: ['id', 'title', 'description', 'price', 'stock', 'rating'],
+                            properties: {
+                                id: { type: 'integer', minimum: 1 },
+                                title: { type: 'string', minLength: 2, maxLength: 100 },
+                                description: { type: 'string' },
+                                price: { type: 'number', multipleOf: 0.01 },
+                                stock: { type: 'number' },
+                                rating: { type: 'string' },
+                                image_key: { type: ['string', 'null'] }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 };
@@ -90,7 +92,11 @@ const update_product_schema = {
         response: {
             200: {
                 type: 'object',
-                additionalProperties: true
+                required: ['success', 'game'],
+                properties: {
+                    success: { type: 'boolean' },
+                    game: UpdateProduct
+                }
             }
         }
     }

@@ -1,24 +1,34 @@
+const { register_user_schema, login_user_schema, logout_user_schema, is_user_logged_in_schema, destroy_user_schema } = require('../models/user.model');
+
+const { register_user, login_user, logout_user, is_user_logged_in, destroy_user } = require('../controllers/user.controller');
+
 async function user_routes(fastify, options) {
-    fastify.get('/', async (req, reply) => {
-        return { message: "It is working..." };
-    });
 
-    fastify.get('/testout', async function (req, reply) {
-        const connection = await fastify.mysql.getConnection();
-        const [ rows ] = await connection.query('SELECT * FROM games JOIN images ON games.id = images.gameID;');
-        connection.release();
-        reply.send({ data: rows });
-    });
+    // Skapar en ny användare.
+    fastify.post('/register', {
+        ...register_user_schema
+    }, register_user.bind(fastify));
 
-    fastify.post('/register', async (req, reply) => {
-        const { username, password } = req.body;
-        const connection = await fastify.mysql.getConnection();
+    // Loggar in användaren.
+    fastify.post('/login', {
+        ...login_user_schema
+    }, login_user.bind(fastify));
 
-        const user = await connection.query('INSERT INTO users (username, password_hash) VALUES(?, ?)', 
-            [username, password]);
+    // Loggar ut användaren.
+    fastify.post('/logout', {
+        ...logout_user_schema
+    }, logout_user.bind(fastify));
 
-        reply.send({ user: user });
-    });
+    // Kollar om användaren är inloggad.
+    fastify.post('/check', {
+        onRequest: [fastify.authenticate],
+        ...is_user_logged_in_schema
+    }, is_user_logged_in.bind(fastify));
+
+    fastify.delete('/destroy', {
+        onRequest: [fastify.authenticate],
+        ...destroy_user_schema
+    }, destroy_user.bind(fastify));
 }
 
 module.exports = user_routes;

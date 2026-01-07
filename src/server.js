@@ -18,11 +18,26 @@ fastify.setErrorHandler((error, req, reply) => {
 
     // MySQL felhantering.
     if (error.code) {
+        const msg = error.sqlMessage || '';
         switch (error.code) {
             case 'ER_DUP_ENTRY':
+                if (msg.includes('games.title')) {
+                    return reply.code(409).send({
+                        success: false,
+                        message: 'A game with this title already exists.'
+                    });
+                }
+
+                if (msg.includes('users.username')) {
+                    return reply.code(409).send({
+                        success: false,
+                        message: 'Username already exists.'
+                    });
+                }
+
                 return reply.code(409).send({
                     success: false,
-                    message: 'A game with this title already exists.'
+                    message: 'A duplicate entry.'
                 });
             case 'ER_NO_REFERENCED_ROW_2':
                 return reply.code(400).send({
@@ -47,14 +62,14 @@ fastify.setErrorHandler((error, req, reply) => {
         return reply.code(error.statusCode).send({
             success: false,
             message: error.message,
-            error: error
+            error: process.env.NODE_ENV === 'development' ? error : undefined // För att dölja felmeddelandet vid produktion.
         });
     }
 
     reply.code(500).send({
         success: false,
         message: 'Internal server error',
-        error: error
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined // För att dölja felmeddelandet vid produktion.
     });
 });
 
@@ -66,13 +81,29 @@ async function init() {
     try {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
+        fastify.register(require('@fastify/jwt'), {
+            secret: process.env.TOKEN_SECRET,
+            cookie: {
+                cookieName: 'auth'
+            }
+        });
+
+        fastify.register(require('@fastify/cookie'), {
+            secret: process.env.COOKIE_SECRET,
+            hook: 'onRequest'
+        });
+
+        fastify.register(require('./authentication/protect-routes'));
+
+
         // Begränsar filstorlekar.
         fastify.register(require('@fastify/multipart'), {
             limits: {
                 fileSize: 5 * 1024 * 1024
             }
         });
-        fastify.register(require("./routes/user.route"));
+
+        fastify.register(require("./routes/user.route"), { prefix: '/user' });
         fastify.register(require("./routes/product.route"));
         fastify.register(require("./routes/image.route"));
 

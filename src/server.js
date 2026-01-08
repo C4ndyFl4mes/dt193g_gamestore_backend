@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const fastify = require('fastify')({ logger: true });
+const cors = require('@fastify/cors');
 const mysqlDB = require('./config/db.js');
 const port = process.env.PORT || 3401;
 
@@ -103,6 +104,11 @@ async function init() {
     try {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
+        // Under utveckling.
+        await fastify.register(cors, {
+            origin: '*'
+        });
+
         fastify.register(require('@fastify/jwt'), {
             secret: process.env.TOKEN_SECRET,
             cookie: {
@@ -121,7 +127,7 @@ async function init() {
         // Begränsar filstorlekar.
         fastify.register(require('@fastify/multipart'), {
             limits: {
-                fileSize: 5 * 1024 * 1024
+                fileSize: 5 * 1024 * 1024,
             }
         });
 

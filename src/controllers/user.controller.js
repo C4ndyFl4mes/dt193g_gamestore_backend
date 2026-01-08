@@ -64,7 +64,13 @@ async function login_user(req, reply) {
 }
 
 async function logout_user(req, reply) {
-    reply.code(200).clearCookie('auth').send({
+    reply.code(200).clearCookie('auth', {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        signed: true
+    }).send({
         success: true,
         message: 'Logged out.'
     });

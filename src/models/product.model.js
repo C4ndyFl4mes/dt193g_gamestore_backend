@@ -42,7 +42,17 @@ const get_products_schema = {
                                 price: { type: 'number', multipleOf: 0.01 },
                                 stock: { type: 'number' },
                                 rating: { type: 'string' },
-                                image_key: { type: ['string', 'null'] }
+                                image_key: { type: ['string', 'null'] },
+                                genres: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'integer', minimum: 1 },
+                                            name: { type: 'string' }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

@@ -6,14 +6,39 @@ async function get_products(req, reply) {
         connection = await this.mysql.getConnection();
         const order = req.query.order_by || 'title_asc';
 
-        const [[products]] = await connection.query('CALL GetGames(?)', [order]);
+        const [[rows]] = await connection.query('CALL GetGames(?)', [order]);
 
-        if (products.length === 0) {
+        if (rows.length === 0) {
             const error = new Error('No games found.');
             error.statusCode = 404;
             throw error;
         }
 
+        // Grupperar spelen så att alla genres är per spel.
+        const gamesMap = new Map();
+        rows.forEach(row => {
+            if (!gamesMap.has(row.id)) {
+                gamesMap.set(row.id, {
+                    id: row.id,
+                    title: row.title,
+                    description: row.description,
+                    price: row.price,
+                    stock: row.stock,
+                    rating: row.rating,
+                    image_key: row.image_key,
+                    genres: []
+                });
+            }
+
+            if (row.genreID && row.genre_name) {
+                gamesMap.get(row.id).genres.push({
+                    id: row.genreID,
+                    name: row.genre_name
+                });
+            }
+        });
+
+        const products = Array.from(gamesMap.values());
         reply.code(200).send({
             success: true,
             games: products
@@ -48,10 +73,12 @@ async function add_product(req, reply) {
         const price = fields.price ? parseFloat(fields.price) : undefined;
         const stock = fields.stock ? parseInt(fields.stock) : undefined;
         const age_ratingID = fields.age_ratingID ? parseInt(fields.age_ratingID) : undefined;
+        const genreIDs = fields.genres ? JSON.parse(fields.genres) : undefined;
+
 
         // Alla fällt måste existera
-        if (!title || !description || price === undefined || stock === undefined || !age_ratingID) {
-            const error = new Error('Missing one or more of the required fields: title, description, price, stock, age_ratingID');
+        if (!title || !description || price === undefined || stock === undefined || !age_ratingID, !genreIDs) {
+            const error = new Error('Missing one or more of the required fields: title, description, price, stock, age_ratingID, and genres.');
             error.statusCode = 400;
             throw error;
         }
@@ -68,6 +95,7 @@ async function add_product(req, reply) {
             throw error;
         }
 
+
         connection = await this.mysql.getConnection();
         const [result] = await connection.query('INSERT INTO games (age_ratingID, title, description, price, stock) VALUES(?, ?, ?, ?, ?)',
             [age_ratingID, title, description, price, stock]);
@@ -77,6 +105,12 @@ async function add_product(req, reply) {
         // Laddar upp bild till r2.
         if (imageFile && insertId) {
             await uploadImage(imageFile, insertId, connection);
+        }
+
+        if (Array.isArray(genreIDs) && insertId) {
+            for (let i = 0; i < genreIDs.length; i++) {
+                await connection.query('INSERT INTO game_genres (gameID, genreID) VALUES(?, ?)', [insertId, genreIDs[i]]);
+            }
         }
 
         reply.code(201).send({
@@ -153,10 +187,11 @@ async function update_product(req, reply) {
         const price = parseNumberField(fields.price, 'price');
         const stock = parseNumberField(fields.stock, 'stock');
         const age_ratingID = parseNumberField(fields.age_ratingID, 'age_ratingID');
+        const genreIDs = fields.genres ? JSON.parse(fields.genres) : undefined;
 
 
         // Valideringar.
-         if (title !== undefined && title.trim().length === 0) {
+        if (title !== undefined && title.trim().length === 0) {
             const error = new Error('Title cannot be empty.');
             error.statusCode = 400;
             throw error;
@@ -236,6 +271,14 @@ async function update_product(req, reply) {
             await uploadImage(imageFile, id, connection);
         }
 
+        if (Array.isArray(genreIDs)) {
+            await connection.query('DELETE FROM game_genres WHERE gameID = ?', [id]);
+
+            for (let i = 0; i < genreIDs.length; i++) {
+                await connection.query('INSERT INTO game_genres (gameID, genreID) VALUES(?, ?)', [id, genreIDs[i]]);
+            }
+        }
+
         reply.code(200).send({
             success: true,
             game: {
@@ -244,7 +287,8 @@ async function update_product(req, reply) {
                 description,
                 price,
                 stock,
-                age_ratingID
+                age_ratingID,
+                genreIDs
             }
         });
     } finally {

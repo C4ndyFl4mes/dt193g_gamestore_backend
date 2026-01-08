@@ -35,15 +35,37 @@ fastify.setErrorHandler((error, req, reply) => {
                     });
                 }
 
+                if (msg.includes('genres.genre_name')) {
+                    return reply.code(409).send({
+                        success: false,
+                        message: 'Genre already exists.'
+                    });
+                }
+
                 return reply.code(409).send({
                     success: false,
                     message: 'A duplicate entry.'
                 });
             case 'ER_NO_REFERENCED_ROW_2':
+                if (msg.includes('age_ratings')) {
+                    return reply.code(400).send({
+                        success: false,
+                        message: 'Invalid age rating ID.'
+                    });
+                }
+
+                if (msg.includes('genres')) {
+                    return reply.code(400).send({
+                        success: false,
+                        message: 'Invalid genre ID.'
+                    });
+                }
+
                 return reply.code(400).send({
                     success: false,
-                    message: 'Invalid age rating ID.'
+                    message: 'Invalid id.'
                 });
+                
             // Lägger till allteftersom mer fel ska hanteras.
         }
     }

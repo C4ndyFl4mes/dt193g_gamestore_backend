@@ -20,10 +20,13 @@ CREATE PROCEDURE GetGames (
 )
 BEGIN
     SELECT g.id, g.title, g.description, g.price, g.stock,
-           ar.rating, img.image_key
+           ar.rating, img.image_key,
+           gen.id as genreID, gen.genre_name
     FROM games g
     LEFT JOIN age_ratings ar ON g.age_ratingID = ar.id
     LEFT JOIN images img ON g.id = img.gameID
+    LEFT JOIN game_genres gg ON g.id = gg.gameID
+    LEFT JOIN genres gen ON gg.genreID = gen.id
     ORDER BY
         CASE WHEN p_order_by = 'title_asc' THEN g.title END ASC,
         CASE WHEN p_order_by = 'title_desc' THEN g.title END DESC,

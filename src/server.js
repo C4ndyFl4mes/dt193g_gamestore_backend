@@ -66,7 +66,7 @@ fastify.setErrorHandler((error, req, reply) => {
                     success: false,
                     message: 'Invalid id.'
                 });
-                
+
             // Lägger till allteftersom mer fel ska hanteras.
         }
     }
@@ -104,10 +104,12 @@ async function init() {
     try {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
-        // Under utveckling.
         await fastify.register(cors, {
             origin: 'http://localhost:5173',
-            credentials: true
+            methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
+            credentials: true,
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            maxAge: 3600
         });
 
         fastify.register(require('@fastify/jwt'), {

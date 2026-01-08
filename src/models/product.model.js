@@ -1,14 +1,3 @@
-const UpdateProduct = {
-    type: 'object',
-    properties: {
-        age_ratingID: { type: 'integer', minimum: 1 },
-        title: { type: 'string', minLength: 2, maxLength: 100 },
-        description: { type: 'string' },
-        price: { type: 'number', multipleOf: 0.01 },
-        stock: { type: 'number' }
-    }
-}
-
 const IdQuery = {
     type: 'object',
     required: ['id'],
@@ -19,17 +8,7 @@ const IdQuery = {
 
 const post_product_schema = {
     schema: {
-        body: {
-            type: 'object',
-            required: ['age_ratingID', 'title', 'description', 'price', 'stock'],
-            properties: {
-                age_ratingID: { type: 'number' },
-                title: { type: 'string', minLength: 2, maxLength: 100 },
-                description: { type: 'string' },
-                price: { type: 'number', multipleOf: 0.01 },
-                stock: { type: 'number' }
-            }
-        },
+        consumes: ['multipart/form-data'],
         response: {
             201: {
                 type: 'object',
@@ -88,14 +67,17 @@ const delete_product_schema = {
 const update_product_schema = {
     schema: {
         query: IdQuery,
-        body: UpdateProduct,
+        consumes: ['multipart/form-data'],
         response: {
             200: {
                 type: 'object',
                 required: ['success', 'game'],
                 properties: {
                     success: { type: 'boolean' },
-                    game: UpdateProduct
+                    game: {
+                        type: 'object',
+                        additionalProperties: true
+                    }
                 }
             }
         }

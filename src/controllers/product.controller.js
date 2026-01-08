@@ -80,7 +80,9 @@ async function update_product(req, reply) {
 
         reply.code(200).send({
             success: true,
-            game: result
+            game: {
+                title, description, price, stock, age_ratingID, id
+            }
         });
     } finally {
         if (connection) connection.release();

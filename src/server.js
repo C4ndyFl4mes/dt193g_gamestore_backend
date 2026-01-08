@@ -104,7 +104,8 @@ async function init() {
         });
 
         fastify.register(require("./routes/user.route"), { prefix: '/user' });
-        fastify.register(require("./routes/product.route"));
+        fastify.register(require("./routes/product.route"), { prefix: '/game' });
+        fastify.register(require("./routes/genre.route"), { prefix: '/genre' });
         fastify.register(require("./routes/image.route"));
 
 

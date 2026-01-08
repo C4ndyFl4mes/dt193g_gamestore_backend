@@ -106,7 +106,8 @@ async function init() {
 
         // Under utveckling.
         await fastify.register(cors, {
-            origin: '*'
+            origin: 'http://localhost:5173',
+            credentials: true
         });
 
         fastify.register(require('@fastify/jwt'), {

@@ -36,7 +36,7 @@ async function uploadImage(file, id, connection) {
         new PutObjectCommand({
             Bucket: process.env.R2_BUCKET_NAME,
             Key: key,
-            Body: await file.buffer,
+            Body: file.buffer,
             ContentType: file.mimetype
         })
     );

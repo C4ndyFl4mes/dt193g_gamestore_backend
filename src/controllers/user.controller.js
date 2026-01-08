@@ -45,7 +45,7 @@ async function login_user(req, reply) {
                 path: '/',
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: 'none',
                 maxAge: 3600,
                 signed: true
             }).send({

@@ -41,7 +41,7 @@ const get_products_schema = {
                                 description: { type: 'string' },
                                 price: { type: 'number', multipleOf: 0.01 },
                                 stock: { type: 'number' },
-                                rating: { type: 'string' },
+                                rating: { type: 'integer', minimum: 1 },
                                 image_key: { type: ['string', 'null'] },
                                 genres: {
                                     type: 'array',

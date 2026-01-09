@@ -1,13 +1,12 @@
 const { get_genres, add_genre, delete_genre, update_genre } = require("../controllers/genre.controller");
-const { get_genres_schema, post_genre_schema, delete_genre_schema, update_genre_schema } = require("../models/genre.model");
+const { post_genre_schema, delete_genre_schema, update_genre_schema } = require("../models/genre.model");
 
 
 async function genre_routes(fastify, options) {
 
     // Hämtar alla genrer.
     fastify.get('/genres', {
-        onRequest: [fastify.authenticate],
-        ...get_genres_schema
+        onRequest: [fastify.authenticate]
     }, get_genres.bind(fastify));
 
     // Listar en genre.

@@ -22,46 +22,6 @@ const post_product_schema = {
     }
 };
 
-const get_products_schema = {
-    schema: {
-        response: {
-            200: {
-                type: 'object',
-                required: ['success', 'games'],
-                properties: {
-                    success: { type: 'boolean' },
-                    games: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required: ['id', 'title', 'description', 'price', 'stock', 'rating'],
-                            properties: {
-                                id: { type: 'integer', minimum: 1 },
-                                title: { type: 'string', minLength: 2, maxLength: 100 },
-                                description: { type: 'string' },
-                                price: { type: 'number', multipleOf: 0.01 },
-                                stock: { type: 'number' },
-                                rating: { type: 'integer', minimum: 1 },
-                                image_key: { type: ['string', 'null'] },
-                                genres: {
-                                    type: 'array',
-                                    items: {
-                                        type: 'object',
-                                        properties: {
-                                            id: { type: 'integer', minimum: 1 },
-                                            name: { type: 'string' }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-};
-
 const delete_product_schema = {
     schema: {
         query: IdQuery,
@@ -96,7 +56,6 @@ const update_product_schema = {
 
 module.exports = {
     post_product_schema,
-    get_products_schema,
     delete_product_schema,
     update_product_schema
 }

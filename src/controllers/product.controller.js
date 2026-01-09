@@ -24,7 +24,7 @@ async function get_products(req, reply) {
                     description: row.description,
                     price: row.price,
                     stock: row.stock,
-                    age_ratingID: row.age_ratingID,
+                    rating: row.age_ratingID,
                     image_key: row.image_key,
                     genres: []
                 });

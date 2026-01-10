@@ -77,7 +77,7 @@ async function add_product(req, reply) {
 
 
         // Alla fällt måste existera
-        if (!title || !description || price === undefined || stock === undefined || !age_ratingID, !genreIDs) {
+        if (!title || !description || price === undefined || stock === undefined || !age_ratingID || !genreIDs) {
             const error = new Error('Missing one or more of the required fields: title, description, price, stock, age_ratingID, and genres.');
             error.statusCode = 400;
             throw error;

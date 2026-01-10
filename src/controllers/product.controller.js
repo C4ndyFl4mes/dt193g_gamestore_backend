@@ -68,15 +68,23 @@ async function add_product(req, reply) {
             }
         }
 
-        if (Number.isNaN(price)) {
-            const error = new Error('Price must be a number.');
-            error.statusCode = 400;
-            throw error;
-        }
+        // Konverterar text siffror till siffror. Om undefined så blir värdet det och inte uppdateras i databasen.
+        const parseNumberField = (value, name) => {
+            if (value === undefined) return undefined;
+            const num = Number(value);
+            // Ett felmeddelande ifall en kolumn inte ska vara en siffra.
+            if (Number.isNaN(num)) {
+                const err = new Error(`Invalid ${name}`);
+                err.statusCode = 400;
+                throw err;
+            }
+            return num;
+        };
+
+        const price = parseNumberField(fields.price, 'price');
 
         const title = fields.title;
         const description = fields.description;
-        const price = fields.price ? parseFloat(fields.price) : undefined;
         const stock = fields.stock ? parseInt(fields.stock) : undefined;
         const age_ratingID = fields.age_ratingID ? parseInt(fields.age_ratingID) : undefined;
         const genreIDs = fields.genres ? JSON.parse(fields.genres) : undefined;

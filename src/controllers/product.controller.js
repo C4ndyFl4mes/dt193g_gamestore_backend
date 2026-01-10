@@ -68,6 +68,12 @@ async function add_product(req, reply) {
             }
         }
 
+        if (Number.isNaN(price)) {
+            const error = new Error('Price must be a number.');
+            error.statusCode = 400;
+            throw error;
+        }
+
         const title = fields.title;
         const description = fields.description;
         const price = fields.price ? parseFloat(fields.price) : undefined;
@@ -88,6 +94,8 @@ async function add_product(req, reply) {
             error.statusCode = 400;
             throw error;
         }
+
+        
 
         if (price < 0 || stock < 0) {
             const error = new Error('Price and stock cannot be negative.');

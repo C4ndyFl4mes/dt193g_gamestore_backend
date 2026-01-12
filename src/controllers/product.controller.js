@@ -33,7 +33,7 @@ async function get_products(req, reply) {
             if (row.genreID && row.genre_name) {
                 gamesMap.get(row.id).genres.push({
                     id: row.genreID,
-                    name: row.genre_name
+                    genre_name: row.genre_name
                 });
             }
         });

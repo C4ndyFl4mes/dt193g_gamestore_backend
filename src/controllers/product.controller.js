@@ -281,12 +281,12 @@ async function update_product(req, reply) {
                 throw error;
             }
         }
+        let imageURL;
 
         // Laddar upp bild till r2.
         if (imageFile) {
-            await uploadImage(imageFile, id, connection);
+            imageURL = await uploadImage(imageFile, id, connection);
         }
-
         if (Array.isArray(genreIDs)) {
             await connection.query('DELETE FROM game_genres WHERE gameID = ?', [id]);
 
@@ -304,7 +304,8 @@ async function update_product(req, reply) {
                 price,
                 stock,
                 age_ratingID,
-                genreIDs
+                genreIDs,
+                image_key: imageURL ? imageURL.url : undefined
             }
         });
     } finally {

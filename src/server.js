@@ -105,7 +105,7 @@ async function init() {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
         await fastify.register(cors, {
-            origin: 'http://localhost:5173',
+            origin: 'https://dt193g-gamestore.netlify.app/',
             methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
             credentials: true,
             allowedHeaders: ['Content-Type', 'Authorization'],

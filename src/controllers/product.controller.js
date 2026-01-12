@@ -18,16 +18,16 @@ async function get_products(req, reply) {
         const gamesMap = new Map();
         rows.forEach(row => {
             if (!gamesMap.has(row.id)) {
-                gamesMap.set(row.id, {
-                    id: row.id,
-                    title: row.title,
-                    description: row.description,
-                    price: row.price,
-                    stock: row.stock,
-                    rating: row.rating,
-                    image_key: row.image_key,
-                    genres: []
-                });
+                    gamesMap.set(row.id, {
+                        id: row.id,
+                        title: row.title,
+                        description: row.description,
+                        price: row.price,
+                        stock: row.stock,
+                        age_ratingID: row.age_ratingID,
+                        image_key: row.image_key,
+                        genres: []
+                    });
             }
 
             if (row.genreID && row.genre_name) {

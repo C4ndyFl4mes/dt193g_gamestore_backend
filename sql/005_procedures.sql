@@ -19,8 +19,8 @@ CREATE PROCEDURE GetGames (
     IN p_order_by VARCHAR(50)
 )
 BEGIN
-    SELECT g.id, g.title, g.description, g.price, g.stock,
-           ar.rating, img.image_key,
+        SELECT g.id, g.title, g.description, g.price, g.stock,
+            g.age_ratingID, ar.rating, img.image_key,
            gen.id as genreID, gen.genre_name
     FROM games g
     LEFT JOIN age_ratings ar ON g.age_ratingID = ar.id

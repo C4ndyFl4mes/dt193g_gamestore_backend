@@ -282,11 +282,16 @@ async function update_product(req, reply) {
             }
         }
         let imageURL;
+        let image_key;
 
         // Laddar upp bild till r2.
         if (imageFile) {
             imageURL = await uploadImage(imageFile, id, connection);
+        } else {
+            const [[row]] = await connection.query('SELECT image_key FROM games WHERE id = ?', [id]);
+            image_key = row ? row.image_key : undefined;
         }
+
         if (Array.isArray(genreIDs)) {
             await connection.query('DELETE FROM game_genres WHERE gameID = ?', [id]);
 
@@ -305,7 +310,7 @@ async function update_product(req, reply) {
                 stock,
                 age_ratingID,
                 genreIDs,
-                image_key: imageURL ? imageURL.url : undefined
+                image_key
             }
         });
     } finally {

@@ -288,7 +288,7 @@ async function update_product(req, reply) {
         if (imageFile) {
             imageURL = await uploadImage(imageFile, id, connection);
         } else {
-            const [[row]] = await connection.query('SELECT image_key FROM games WHERE id = ?', [id]);
+            const [[row]] = await connection.query('SELECT image_key FROM images WHERE gameID = ?', [id]);
             image_key = row ? row.image_key : undefined;
         }
 

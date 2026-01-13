@@ -6,7 +6,7 @@ async function get_products(req, reply) {
         connection = await this.mysql.getConnection();
         const order = req.query.order_by || 'title_asc';
 
-        const [rows] = await connection.query('CALL GetGames(?)', [order]);
+        const [[rows]] = await connection.query('CALL GetGames(?)', [order]);
 
         if (rows.length === 0) {
             const error = new Error('No games found.');
@@ -281,14 +281,14 @@ async function update_product(req, reply) {
                 throw error;
             }
         }
-
+        
         let image_key;
 
         // Laddar upp bild till r2.
         if (imageFile) {
             imageURL = await uploadImage(imageFile, id, connection);
         } else {
-            const [row] = await connection.query('SELECT image_key FROM images WHERE gameID = ?', [id]);
+            const [[row]] = await connection.query('SELECT image_key FROM images WHERE gameID = ?', [id]);
             image_key = row ? row.image_key : undefined;
         }
 

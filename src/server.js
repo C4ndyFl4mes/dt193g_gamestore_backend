@@ -85,14 +85,14 @@ fastify.setErrorHandler((error, req, reply) => {
         return reply.code(error.statusCode).send({
             success: false,
             message: error.message,
-            error: process.env.NODE_ENV === 'development' ? error : undefined // För att dölja felmeddelandet vid produktion.
+            error: error
         });
     }
 
     reply.code(500).send({
         success: false,
         message: 'Internal server error',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined // För att dölja felmeddelandet vid produktion.
+        error: error
     });
 });
 

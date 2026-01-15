@@ -1,0 +1,11 @@
+game(id (PK), ratingID (FK), title, description, imageURL, price, stock);
+
+age_rating(id (PK), rating);
+
+genre(id (PK), name);
+
+belongs_to(gameID (FK), genreID (FK));
+
+user(id (PK), username, password_hash);
+
+image(id (PK), key);

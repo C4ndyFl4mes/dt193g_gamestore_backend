@@ -81,12 +81,11 @@ async function add_product(req, reply) {
             return num;
         };
 
-        const price = parseNumberField(fields.price, 'price');
-
         const title = fields.title;
         const description = fields.description;
-        const stock = fields.stock ? parseInt(fields.stock) : undefined;
-        const age_ratingID = fields.age_ratingID ? parseInt(fields.age_ratingID) : undefined;
+        const price = parseNumberField(fields.price, 'price');
+        const stock = parseNumberField(fields.stock, 'stock');
+        const age_ratingID = parseNumberField(fields.age_ratingID, 'age_ratingID');
         const genreIDs = fields.genres ? JSON.parse(fields.genres) : undefined;
 
 

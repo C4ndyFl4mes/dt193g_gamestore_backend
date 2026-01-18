@@ -1,5 +1,5 @@
 
-
+// Hämtar alla genrer från databasen.
 async function get_genres(req, reply) {
     let connection;
     try {
@@ -21,6 +21,7 @@ async function get_genres(req, reply) {
     }
 }
 
+// Lägger till en ny genre i databasen.
 async function add_genre(req, reply) {
     let connection;
     try {
@@ -42,6 +43,7 @@ async function add_genre(req, reply) {
     }
 }
 
+// Tar bort en genre från databasen.
 async function delete_genre(req, reply) {
     let connection;
     try {
@@ -66,6 +68,7 @@ async function delete_genre(req, reply) {
     }
 }
 
+// Uppdaterar en genre i databasen.
 async function update_genre(req, reply) {
     let connection;
     try {

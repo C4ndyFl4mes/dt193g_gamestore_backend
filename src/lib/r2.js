@@ -1,5 +1,6 @@
 const { S3Client } = require('@aws-sdk/client-s3');
 
+// Konfigurerar r2 klienten.
 const r2 = new S3Client({
     region: "auto",
     endpoint: `https://${process.env.R2_ACCOUNT_ID}.eu.r2.cloudflarestorage.com`,

@@ -1,5 +1,6 @@
 const fp = require('fastify-plugin');
 
+// Plugin för att skydda rutter med autentisering.
 async function authPlugin(fastify, opts) {
     fastify.decorate('authenticate', async function (req, reply) {
         try {

@@ -9,6 +9,8 @@ const r2 = require('../lib/r2');
  * @returns { object } - url.
  */
 async function uploadImage(file, id, connection) {
+
+    // Kontrollerar att filen existerar och är av rätt typ.
     if (!file) {
         const error = new Error('No file uploaded.');
         error.statusCode = 400;
@@ -23,6 +25,7 @@ async function uploadImage(file, id, connection) {
 
     const ext = file.filename.split(".").pop();
 
+    // Endast jpg tillåts.
     if (ext !== "jpg") {
         const error = new Error('The only image type supported is jpg.');
         error.statusCode = 400;
@@ -41,7 +44,7 @@ async function uploadImage(file, id, connection) {
         })
     );
 
-    const imageUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
+    const imageUrl = `${process.env.R2_PUBLIC_URL}/${key}`; // Bygger url som kan användas för att nå bilden.
 
     await connection.query('CALL AddImage(?, ?);', [id, imageUrl]);
     return { url: imageUrl };

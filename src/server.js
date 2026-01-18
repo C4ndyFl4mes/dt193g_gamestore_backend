@@ -104,6 +104,7 @@ async function init() {
     try {
         await mysqlDB(fastify); // Ansluter till mySQL databasen.
 
+        // Konfigurerar plugins.
         await fastify.register(cors, {
             origin: ['https://dt193g-gamestore.netlify.app', 'http://localhost:5173'],
             methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -124,8 +125,8 @@ async function init() {
             hook: 'onRequest'
         });
 
-        fastify.register(require('./authentication/protect-routes'));
 
+        fastify.register(require('./authentication/protect-routes'));
 
         // Begränsar filstorlekar.
         fastify.register(require('@fastify/multipart'), {
@@ -134,6 +135,7 @@ async function init() {
             }
         });
 
+        // Registrerar rutter.
         fastify.register(require("./routes/user.route"), { prefix: '/user' });
         fastify.register(require("./routes/product.route"), { prefix: '/game' });
         fastify.register(require("./routes/genre.route"), { prefix: '/genre' });

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-
+// Registrerar en ny användare.
 async function register_user(req, reply) {
     let connection;
     try {
@@ -23,6 +23,7 @@ async function register_user(req, reply) {
     }
 }
 
+// Loggar in en användare.
 async function login_user(req, reply) {
     let connection;
     try {
@@ -63,6 +64,7 @@ async function login_user(req, reply) {
     }
 }
 
+// Loggar ut en användare.
 async function logout_user(req, reply) {
     reply.code(200).clearCookie('auth', {
         path: '/',
@@ -76,6 +78,7 @@ async function logout_user(req, reply) {
     });
 }
 
+// Tar bort en användare.
 async function destroy_user(req, reply) {
     let connection;
     try {
@@ -94,6 +97,7 @@ async function destroy_user(req, reply) {
     }
 }
 
+// Kollar om en användare är inloggad.
 async function is_user_logged_in(req, reply) {
     reply.code(200).send({
         success: true,

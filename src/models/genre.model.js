@@ -7,6 +7,7 @@ const Genre = {
     }
 };
 
+// Schema för gemensam användning av id i query-parametrar.
 const IdQuery = {
     type: 'object',
     required: ['id'],
@@ -31,6 +32,7 @@ const ReturnGenre = {
     }
 }
 
+// Schema för att skapa en ny genre.
 const post_genre_schema = {
     schema: {
         body: Genre,
@@ -40,6 +42,7 @@ const post_genre_schema = {
     }
 };
 
+// Schema för att ta bort en genre.
 const delete_genre_schema = {
     schema: {
         query: IdQuery,
@@ -49,6 +52,7 @@ const delete_genre_schema = {
     }
 };
 
+// Schema för att uppdatera en genre.
 const update_genre_schema = {
     schema: {
         query: IdQuery,

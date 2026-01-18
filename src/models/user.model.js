@@ -17,6 +17,7 @@ const Success = {
     }
 }
 
+// Schema för gemensam användning av username i query-parametrar.
 const UsernameQuery = {
     type: 'object',
     required: ['username'],
@@ -25,6 +26,7 @@ const UsernameQuery = {
     }
 };
 
+// Schema för att registrera en ny användare.
 const register_user_schema = {
     schema: {
         body: User,
@@ -34,6 +36,7 @@ const register_user_schema = {
     }
 }
 
+// Schema för att logga in en användare.
 const login_user_schema = {
     schema: {
         body: User,
@@ -43,6 +46,7 @@ const login_user_schema = {
     }
 }
 
+// Schema för att logga ut en användare.
 const logout_user_schema = {
     schema: {
         response: {
@@ -51,6 +55,7 @@ const logout_user_schema = {
     }
 }
 
+// Schema för att ta bort en användare.
 const destroy_user_schema = {
     schema: {
         query: UsernameQuery,
@@ -60,6 +65,7 @@ const destroy_user_schema = {
     }
 }
 
+// Schema för att kolla om en användare är inloggad.
 const is_user_logged_in_schema = {
     schema: {
         response: {

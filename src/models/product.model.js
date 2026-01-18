@@ -1,3 +1,4 @@
+// Schema för gemensam användning av id i query-parametrar.
 const IdQuery = {
     type: 'object',
     required: ['id'],
@@ -6,6 +7,7 @@ const IdQuery = {
     }
 };
 
+// Schema för att skapa en ny produkt.
 const post_product_schema = {
     schema: {
         consumes: ['multipart/form-data'],
@@ -22,6 +24,7 @@ const post_product_schema = {
     }
 };
 
+// Schema för att ta bort en produkt.
 const delete_product_schema = {
     schema: {
         query: IdQuery,
@@ -34,6 +37,7 @@ const delete_product_schema = {
     }
 }
 
+// Schema för att uppdatera en produkt.
 const update_product_schema = {
     schema: {
         query: IdQuery,

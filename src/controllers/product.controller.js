@@ -1,5 +1,6 @@
 const { uploadImage, deleteImage } = require('../utilities/image-handler');
 
+// Hämtar alla produkter från databasen.
 async function get_products(req, reply) {
     let connection;
     try {
@@ -48,6 +49,7 @@ async function get_products(req, reply) {
     }
 }
 
+// Lägger till en produkt i databasen.
 async function add_product(req, reply) {
     let connection;
     try {
@@ -55,11 +57,13 @@ async function add_product(req, reply) {
         const fields = {};
         let imageFile = null;
 
+        // Läser in multipart data. For await används för att hämta varje del när den är tillgänglig.
         for await (const part of parts) {
             if (part.type === 'file') {
                 const buffer = await part.toBuffer();
+                // Sparar filen för uppladdning senare.
                 imageFile = {
-                    buffer: buffer,
+                    buffer: buffer, // Filens data som en buffer.
                     filename: part.filename,
                     mimetype: part.mimetype
                 };
@@ -137,6 +141,7 @@ async function add_product(req, reply) {
     }
 }
 
+// Tar bort en produkt från databasen.
 async function delete_product(req, reply) {
     let connection;
     try {
@@ -162,6 +167,7 @@ async function delete_product(req, reply) {
     }
 }
 
+// Uppdaterar en produkt i databasen.
 async function update_product(req, reply) {
     let connection;
     try {
@@ -170,11 +176,13 @@ async function update_product(req, reply) {
         const fields = {};
         let imageFile = null;
 
+        // Läser in multipart data. For await används för att hämta varje del när den är tillgänglig.
         for await (const part of parts) {
             if (part.type === 'file') {
                 const buffer = await part.toBuffer();
+                // Sparar filen för uppladdning senare.
                 imageFile = {
-                    buffer: buffer,
+                    buffer: buffer, // Filens data som en buffer.
                     filename: part.filename,
                     mimetype: part.mimetype
                 };
